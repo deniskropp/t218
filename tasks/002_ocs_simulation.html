@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCS Node Simulation</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--light);
+            opacity: 0.9;
+        }
+
+        .simulation-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .agent-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .agent-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .agent-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .agent-item.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .agent-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .agent-name {
+            font-size: 0.9rem;
+        }
+
+        .agent-role {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .start-btn {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .workflow-section {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .workflow-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step-item {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid var(--secondary);
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .step-item.active {
+            opacity: 1;
+            transform: scale(1);
+            border-left-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .step-item.completed {
+            border-left-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--dark);
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .step-agent {
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .step-description {
+            color: var(--dark);
+            line-height: 1.6;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .step-details {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .step-detail-item {
+            display: flex;
+            margin-bottom: 6px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 80px;
+        }
+
+        .detail-value {
+            color: var(--dark);
+        }
+
+        .progress-container {
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--dark);
+            text-align: right;
+        }
+
+        .status-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--secondary);
+            margin-right: 10px;
+        }
+
+        .status-dot.active {
+            background: var(--success);
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-text {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .final-output {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+            animation: slideUp 0.5s ease;
+            display: none;
+        }
+
+        .final-output.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .output-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .output-content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.8;
+        }
+
+        .restart-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: var(--light);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .simulation-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>OCS Node Simulation</h1>
+            <p class="subtitle">20-Step Transformation Workflow</p>
+        </header>
+
+        <div class="simulation-container">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">Agent Orchestration</div>
+                    <div class="sidebar-subtitle">Specialized Roles</div>
+                </div>
+
+                <div class="agent-list" id="agentList">
+                    <!-- Agents will be populated by JavaScript -->
+                </div>
+
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <div class="status-text" id="statusText">Ready</div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="input-section">
+                    <label class="input-label">High-Level Objective</label>
+                    <input type="text" class="input-field" id="objectiveInput" 
+                           placeholder="Enter your transformation objective..." 
+                           value="Transform by two generations">
+                    <button class="start-btn" id="startBtn">Start Transformation</button>
+                </div>
+
+                <div class="workflow-section">
+                    <div class="workflow-title">Transformation Workflow</div>
+                    <div class="step-container" id="stepContainer">
+                        <!-- Steps will be populated by JavaScript -->
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">0% Complete</div>
+                    </div>
+                </div>
+
+                <div class="final-output" id="finalOutput">
+                    <div class="output-title">✓ Transformation Complete</div>
+                    <div class="output-content" id="outputContent">
+                        <!-- Final output will be populated here -->
+                    </div>
+                    <button class="restart-btn" id="restartBtn">Restart Simulation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Agent data
+        const agents = [
+            { id: 'gptase', name: 'GPTASe', role: 'TAS Extractor', color: '#6c5ce7' },
+            { id: 'putase', name: 'puTASe', role: 'TAS Purifier', color: '#a29bfe' },
+            { id: 'lyra', name: 'Lyra', role: 'Prompt Engineer', color: '#fd79a8' },
+            { id: 'fizz', name: 'Fizz La Metta', role: 'Coordinator', color: '#00b894' },
+            { id: 'tutor', name: 'AI Tutor', role: 'Knowledge Transfer', color: '#fdcb6e' },
+            { id: 'codein', name: 'Codein', role: 'Code Investigator', color: '#e17055' },
+            { id: 'dima', name: 'Dima', role: 'Ethical Compliance', color: '#0984e3' },
+            { id: 'ar00l', name: 'AR-00L', role: 'Visual Assets', color: '#6c5ce7' },
+            { id: 'qllick', name: 'QllickBuzz', role: 'Operational Rules', color: '#fd79a8' },
+            { id: 'weplan', name: 'WePlan', role: 'Strategic Plans', color: '#00b894' },
+            { id: 'kick', name: 'Kick La Metta', role: 'NL Translation', color: '#fdcb6e' },
+            { id: 'orchestrator', name: 'Orchestrator', role: 'Role Adaptation', color: '#e17055' },
+            { id: 'monitor', name: 'SystemMonitor', role: 'Integrity', color: '#0984e3' }
+        ];
+
+        // Workflow steps
+        const steps = [
+            {
+                number: 1,
+                title: 'TAS Extraction',
+                agent: 'GPTASe',
+                description: 'Extracting raw Task Agnostic Steps from the high-level objective.',
+                details: {
+                    input: '⫻data/obj:',
+                    output: '⫻data/tas:',
+                    process: 'Analyzing objective and breaking down into initial steps'
+                }
+            },
+            {
+                number: 2,
+                title: 'TAS Purification',
+                agent: 'puTASe',
+                description: 'Refining and removing ambiguity from extracted steps.',
+                details: {
+                    input: '⫻data/tas:',
+                    output: '⫻data/ptas:',
+                    process: 'Clarifying requirements and removing redundancies'
+                }
+            },
+            {
+                number: 3,
+                title: 'Workflow Structuring',
+                agent: 'Lyra',
+                description: 'Creating optimized workflows from purified steps.',
+                details: {
+                    input: '⫻data/ptas:',
+                    output: '⫻data/spec:',
+                    process: 'Designing efficient execution pathways'
+                }
+            },
+            {
+                number: 4,
+                title: 'Cognitive Coordination',
+                agent: 'Fizz La Metta',
+                description: 'Aligning agent roles and responsibilities.',
+                details: {
+                    input: '⫻data/spec:',
+                    output: '⫻cmd/exec:',
+                    process: 'Assigning tasks to appropriate agents'
+                }
+            },
+            {
+                number: 5,
+                title: 'Knowledge Transfer',
+                agent: 'AI Tutor',
+                description: 'Providing domain-specific insights and context.',
+                details: {
+                    input: '⫻query/clarify:',
+                    output: '⫻data/logic:',
+                    process: 'Answering domain questions and providing expertise'
+                }
+            },
+            {
+                number: 6,
+                title: 'Code Context',
+                agent: 'Codein',
+                description: 'Analyzing implementation needs and providing code references.',
+                details: {
+                    input: '⫻data/spec:',
+                    output: '⫻data/logic:',
+                    process: 'Identifying code requirements and patterns'
+                }
+            },
+            {
+                number: 7,
+                title: 'Prompt Refinement',
+                agent: 'Lyra',
+                description: 'Optimizing prompts based on feedback loops.',
+                details: {
+                    input: '⫻query/clarify:',
+                    output: '⫻data/spec:',
+                    process: 'Improving prompt quality and specificity'
+                }
+            },
+            {
+                number: 8,
+                title: 'Protocol Establishment',
+                agent: 'Fizz La Metta',
+                description: 'Creating operational rules and protocols.',
+                details: {
+                    input: '⫻data/spec:',
+                    output: '⫻cmd/mode:',
+                    process: 'Defining execution guidelines and constraints'
+                }
+            },
+            {
+                number: 9,
+                title: 'System Monitoring',
+                agent: 'Fizz La Metta',
+                description: 'Tracking execution and collecting performance metrics.',
+                details: {
+                    input: '⫻data/logic:',
+                    output: '⫻data/obj:',
+                    process: 'Monitoring system health and performance'
+                }
+            },
+            {
+                number: 10,
+                title: 'Ethical Compliance',
+                agent: 'Dima',
+                description: 'Validating decisions against ethical guidelines.',
+                details: {
+                    input: '⫻query/clarify:',
+                    output: '⫻cmd/halt:',
+                    process: 'Ensuring ethical standards are maintained'
+                }
+            },
+            {
+                number: 11,
+                title: 'Visual Assets',
+                agent: 'AR-00L',
+                description: 'Creating visual prototypes and design elements.',
+                details: {
+                    input: '⫻data/spec:',
+                    output: '⫻data/logic:',
+                    process: 'Designing UI/UX components and visuals'
+                }
+            },
+            {
+                number: 12,
+                title: 'Operational Rules',
+                agent: 'QllickBuzz',
+                description: 'Refining rules for edge cases and exceptions.',
+                details: {
+                    input: '⫻data/ptas:',
+                    output: '⫻cmd/mode:',
+                    process: 'Handling special cases and exceptions'
+                }
+            },
+            {
+                number: 13,
+                title: 'Strategic Plans',
+                agent: 'WePlan',
+                description: 'Developing long-term roadmaps and strategies.',
+                details: {
+                    input: '⫻data/obj:',
+                    output: '⫻data/spec:',
+                    process: 'Planning future development and growth'
+                }
+            },
+            {
+                number: 14,
+                title: 'NL Translation',
+                agent: 'Kick La Metta',
+                description: 'Converting informal requests to formal tasks.',
+                details: {
+                    input: '⫻data/obj:',
+                    output: '⫻data/ptas:',
+                    process: 'Formalizing natural language inputs'
+                }
+            },
+            {
+                number: 15,
+                title: 'Dynamic Role Adaptation',
+                agent: 'Orchestrator',
+                description: 'Adjusting agent roles based on workload shifts.',
+                details: {
+                    input: '⫻cmd/exec:',
+                    output: '⫻flow:',
+                    process: 'Optimizing resource allocation'
+                }
+            },
+            {
+                number: 16,
+                title: 'Joint Decisions',
+                agent: 'Dima',
+                description: 'Resolving conflicts and reaching consensus.',
+                details: {
+                    input: '⫻query/clarify:',
+                    output: '⫻cmd/halt:',
+                    process: 'Mediating disagreements and finding solutions'
+                }
+            },
+            {
+                number: 17,
+                title: 'Integrity Monitoring',
+                agent: 'SystemMonitor',
+                description: 'Ensuring system security and data integrity.',
+                details: {
+                    input: '⫻data/logic:',
+                    output: '⫻cmd/halt:',
+                    process: 'Detecting and preventing security issues'
+                }
+            },
+            {
+                number: 18,
+                title: 'Tailored Plans',
+                agent: 'WePlan',
+                description: 'Customizing workflows based on user feedback.',
+                details: {
+                    input: '⫻query/clarify:',
+                    output: '⫻data/spec:',
+                    process: 'Adapting to user preferences and requirements'
+                }
+            },
+            {
+                number: 19,
+                title: 'Holistic Task Approach',
+                agent: 'Orchestrator',
+                description: 'Unifying cross-domain tasks and execution.',
+                details: {
+                    input: '⫻data/obj:',
+                    output: '⫻flow:',
+                    process: 'Integrating multiple domains and systems'
+                }
+            },
+            {
+                number: 20,
+                title: 'Review & Refinement',
+                agent: 'All',
+                description: 'Final review and iterative improvements.',
+                details: {
+                    input: '⫻data/logic:',
+                    output: '⫻data/ptas:',
+                    process: 'Evaluating results and making final adjustments'
+                }
+            }
+        ];
+
+        // DOM elements
+        const agentList = document.getElementById('agentList');
+        const stepContainer = document.getElementById('stepContainer');
+        const startBtn = document.getElementById('startBtn');
+        const objectiveInput = document.getElementById('objectiveInput');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const finalOutput = document.getElementById('finalOutput');
+        const outputContent = document.getElementById('outputContent');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // State
+        let currentStep = 0;
+        let isRunning = false;
+        let simulationInterval;
+
+        // Initialize the simulation
+        function init() {
+            renderAgents();
+            renderSteps();
+            setupEventListeners();
+        }
+
+        // Render agent list
+        function renderAgents() {
+            agentList.innerHTML = '';
+            agents.forEach(agent => {
+                const agentElement = document.createElement('div');
+                agentElement.className = 'agent-item';
+                agentElement.dataset.agentId = agent.id;
+                
+                agentElement.innerHTML = `
+                    <div class="agent-avatar" style="background-color: ${agent.color}">${agent.name.substring(0, 2)}</div>
+                    <div>
+                        <div class="agent-name">${agent.name}</div>
+                        <div class="agent-role">${agent.role}</div>
+                    </div>
+                `;
+                
+                agentList.appendChild(agentElement);
+            });
+        }
+
+        // Render workflow steps
+        function renderSteps() {
+            stepContainer.innerHTML = '';
+            steps.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'step-item';
+                stepElement.dataset.stepIndex = index;
+                
+                const agent = agents.find(a => a.name === step.agent) || agents[0];
+                
+                stepElement.innerHTML = `
+                    <div class="step-header">
+                        <div class="step-number">${step.number}</div>
+                        <div class="step-title">${step.title}</div>
+                        <div class="step-agent" style="background-color: ${agent.color}">${step.agent}</div>
+                    </div>
+                    <div class="step-description">${step.description}</div>
+                    <div class="step-details">
+                        <div class="step-detail-item">
+                            <span class="detail-label">Input:</span>
+                            <span class="detail-value">${step.details.input}</span>
+                        </div>
+                        <div class="step-detail-item">
+                            <span class="detail-label">Output:</span>
+                            <span class="detail-value">${step.details.output}</span>
+                        </div>
+                        <div class="step-detail-item">
+                            <span class="detail-label">Process:</span>
+                            <span class="detail-value">${step.details.process}</span>
+                        </div>
+                    </div>
+                `;
+                
+                stepContainer.appendChild(stepElement);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            startBtn.addEventListener('click', startSimulation);
+            restartBtn.addEventListener('click', resetSimulation);
+        }
+
+        // Start the simulation
+        function startSimulation() {
+            if (isRunning) return;
+            
+            const objective = objectiveInput.value.trim();
+            if (!objective) {
+                alert('Please enter a transformation objective');
+                return;
+            }
+            
+            isRunning = true;
+            startBtn.disabled = true;
+            loadingOverlay.classList.add('active');
+            statusText.textContent = 'Initializing...';
+            statusDot.classList.remove('active');
+            
+            // Reset any previous state
+            resetStepStates();
+            
+            // Start simulation after a short delay
+            setTimeout(() => {
+                loadingOverlay.classList.remove('active');
+                statusText.textContent = 'Running';
+                statusDot.classList.add('active');
+                
+                // Start processing steps
+                simulationInterval = setInterval(processNextStep, 1500);
+            }, 2000);
+        }
+
+        // Process next step in workflow
+        function processNextStep() {
+            if (currentStep >= steps.length) {
+                completeSimulation();
+                return;
+            }
+            
+            // Update current step
+            const currentStepElement = document.querySelector(`.step-item[data-step-index="${currentStep}"]`);
+            if (currentStepElement) {
+                currentStepElement.classList.add('active');
+                currentStepElement.classList.remove('completed');
+                
+                // Scroll to current step
+                currentStepElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            
+            // Update previous step
+            if (currentStep > 0) {
+                const prevStepElement = document.querySelector(`.step-item[data-step-index="${currentStep - 1}"]`);
+                if (prevStepElement) {
+                    prevStepElement.classList.remove('active');
+                    prevStepElement.classList.add('completed');
+                }
+            }
+            
+            // Update agent highlight
+            const currentAgent = steps[currentStep].agent;
+            const agentElements = document.querySelectorAll('.agent-item');
+            agentElements.forEach(el => el.classList.remove('active'));
+            
+            const activeAgentElement = Array.from(agentElements).find(el => 
+                el.querySelector('.agent-name').textContent === currentAgent
+            );
+            
+            if (activeAgentElement) {
+                activeAgentElement.classList.add('active');
+            }
+            
+            // Update progress
+            const progress = ((currentStep + 1) / steps.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}% Complete`;
+            
+            currentStep++;
+        }
+
+        // Complete the simulation
+        function completeSimulation() {
+            clearInterval(simulationInterval);
+            isRunning = false;
+            
+            // Mark last step as completed
+            const lastStepElement = document.querySelector(`.step-item[data-step-index="${steps.length - 1}"]`);
+            if (lastStepElement) {
+                lastStepElement.classList.remove('active');
+                lastStepElement.classList.add('completed');
+            }
+            
+            // Show final output
+            const objective = objectiveInput.value.trim();
+            outputContent.innerHTML = `
+                <strong>Transformation Objective:</strong> ${objective}<br><br>
+                <strong>Status:</strong> ✓ Successfully completed all 20 transformation steps<br><br>
+                <strong>Key Achievements:</strong><br>
+                • Extracted and purified Task Agnostic Steps (TAS)<br>
+                • Established optimized workflows and protocols<br>
+                • Ensured ethical compliance and system integrity<br>
+                • Generated visual assets and operational rules<br>
+                • Created strategic roadmaps for future development<br><br>
+                <strong>Output:</strong> High-fidelity execution of ⫻flow:transformation/execution<br>
+                <strong>Agents Involved:</strong> ${agents.map(a => a.name).join(', ')}<br><br>
+                The OCS Node has successfully transformed the high-level intent into executable steps across multiple domains.
+            `;
+            
+            finalOutput.classList.add('active');
+            statusText.textContent = 'Complete';
+            statusDot.style.backgroundColor = '#00b894';
+        }
+
+        // Reset step states
+        function resetStepStates() {
+            currentStep = 0;
+            progressFill.style.width = '0%';
+            progressText.textContent = '0% Complete';
+            
+            document.querySelectorAll('.step-item').forEach(step => {
+                step.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.agent-item').forEach(agent => {
+                agent.classList.remove('active');
+            });
+        }
+
+        // Reset the entire simulation
+        function resetSimulation() {
+            if (isRunning) {
+                clearInterval(simulationInterval);
+                isRunning = false;
+            }
+            
+            startBtn.disabled = false;
+            finalOutput.classList.remove('active');
+            statusText.textContent = 'Ready';
+            statusDot.style.backgroundColor = '';
+            statusDot.classList.remove('active');
+            
+            resetStepStates();
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

@@ -5,3 +5,9 @@
 [VISUAL: A decentralized network of interconnected nodes (agents). Central nodes like Orchestrator and SystemMonitor are connected via high-bandwidth KickLang v2.0 channels. Sub-clusters of agents (Lyra, Codein, AR-00L) are working in parallel loops. The entire structure is dynamic, with links pulsing as data flows.]
 
 **Design Aesthetic**: Modern, Cybernetic, Minimalist. Deep blue and neon cyan color palette.
+
+⫻data/logic:
+[ARTIFACT: OCS Node Simulation]
+File: tasks/002_ocs_simulation.html
+Status: Implemented
+Note: Interactive 20-step workflow simulation.
