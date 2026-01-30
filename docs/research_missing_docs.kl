@@ -1,24 +1,42 @@
 # Research Report: Missing Documentation
+Status: **UPDATED** (2026-01-30)
 
 ⫻data/obj:Research code base for missing docs
 
-## Findings
+## 1. Overview
+A re-evaluation of the codebase reveals that significant progress has been made since the initial scaffolding. Many previously missing Knowledge Items have been created, and the source code structure is well-defined.
 
-The OCS Node repository is in its initial state. While the core KickLang protocol and the 20-step transformation workflow are established, several critical documentation artifacts (Knowledge Items) are missing or inconsistent.
+## 2. Resolved Items (Previously Missing)
+The following artifacts are **now present** and populated:
+- **Operational Rules**: `docs/operational_rules.kl` (Verified)
+- **Ethical Compliance**: `docs/ethical_compliance.kl` (Verified)
+- **Persona Specifications**: `docs/personas.kl` (Verified)
+- **Product Guidelines**: `conductor/product-guidelines.md` (Verified)
+- **Code implementation**: `src/` directory exists with `api`, `cli`, and `shared` modules.
 
-### 1. Protocol Discrepancies
-- **Missing Payloads**: `⫻data/rv:`, `⫻data/draft:`, and `⫻data/cite:` were identified in `aichat_sf20_info.txt` but were missing from `docs/playbook.kl`. (Fixed)
-- **Specialized Commands**: Commands like `⫻cmd/lang:` were present but could benefit from clearer usage examples.
+## 3. Current Documentation Gaps
 
-### 2. Missing Knowledge Items (.kl files)
-- **Operational Rules**: Referenced in Workflow Step 12 (`QllickBuzz & QllickFizz`) but no definition file exists.
-- **Ethical Compliance Standards**: Referenced in Workflow Step 10 (`Dima`) but no definition file exists.
-- **Persona Specifications**: Detailed capabilities and prompt templates for each team member (GPTASe, Lyra, etc.) are not documented.
-- **Strategy Blueprints**: Strategic and tailored planning templates for `WePlan` (Steps 13, 18) are missing.
+### A. Technical Architecture Specification
+While `conductor/tech-stack.md` lists tools, there is no **Architecture Guide** describing the specific software design of the Python implementation.
+- **Missing**: `conductor/architecture.md` (or similar)
+- **Needs**: Explanation of the Monorepo structure, how `src/shared/protocol.py` maps to KickLang, and the data flow between API and Agents.
 
-### 3. Missing Structural Documentation
-- **Product Guidelines**: Referenced in conductor extension protocols but missing from `conductor/`.
-- **Technical Design (Python)**: The project rules specify a modern Python (FastAPI/Pydantic) monorepo structure, but there is no architectural specification (`⫻data/spec:`) or initial directory structure for this implementation.
+### B. Strategy Blueprints (WePlan)
+The workflow references "Strategic Plans" (Step 13) and "Tailored Plans" (Step 18) managed by the **WePlan** persona.
+- **Missing**: `docs/strategy_blueprints.kl` or `docs/planning_templates.kl`.
+- **Impact**: No standardized templates for generating roadmaps or customized workflows.
 
-### 4. Code Context
-- There is currently no source code or technical documentation for the OCS Node's logic, despite the tech stack mentioning Markdown/KickLang as the primary orchestration language.
+### C. API Integration Documentation
+The API exists (`src/api/main.py`) with internal docstrings, but there is no external integration guide.
+- **Missing**: `docs/api_guide.md`
+- **Needs**: Examples of how to trigger the transformation engine via HTTP, explanation of the `/execute` endpoint payload structure.
+
+### D. Testing Documentation
+Test infrastructure logic exists, but there is no guide on how to run, write, or interpret tests.
+- **Missing**: `docs/testing.md`
+
+## 4. Source Code Documentation Status
+- **Coverage**: **Moderate/High**.
+  - `src/api/main.py`: Functional docstrings.
+  - `src/shared/protocol.py`: Detailed class and method docstrings.
+- **Recommendation**: Continue interpreting docstrings as the "source of truth" for low-level logic, but create high-level guides (`A` and `C`) for developer onboarding.
