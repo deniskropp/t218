@@ -13,6 +13,9 @@
     ⫻data/ptas: - Purified Task Agnostic Steps.
     ⫻data/spec: - Design/Arch specifications.
     ⫻data/logic: - Implementation code or generated content.
+    ⫻data/rv: - Research Vectors (instead of generic TAS).
+    ⫻data/draft: - The written prose.
+    ⫻data/cite: - Citation data.
 
   Queries:
     ⫻query/clarify: - Request resolution of ambiguity.

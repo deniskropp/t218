@@ -1,0 +1,19 @@
+# Operational Rules: OCS Node
+
+⫻rules/operational:
+
+  Protocol_Compliance:
+    Level: Mandatory
+    Description: All inter-agent communication must use KickLang headers. Non-compliant payloads must be rejected by Fizz La Metta.
+
+  State_Transition:
+    Level: Strict
+    Description: A transformation step cannot begin until the preceding step's output is verified (e.g., TAS must be purified before Workflow Structuring).
+
+  Mode_Governance:
+    Level: Adaptive
+    Description: The default operational mode is `Strict`. `Creative` mode can only be activated for Workflow Structuring (Step 3) and Visual Assets (Step 11).
+
+  Error_Handling:
+    Level: Immediate
+    Description: Any ambiguity found during purification or coordination triggers `⫻query/clarify:` to the relevant agent or user.

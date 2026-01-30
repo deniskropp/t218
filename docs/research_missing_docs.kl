@@ -1,0 +1,24 @@
+# Research Report: Missing Documentation
+
+⫻data/obj:Research code base for missing docs
+
+## Findings
+
+The OCS Node repository is in its initial state. While the core KickLang protocol and the 20-step transformation workflow are established, several critical documentation artifacts (Knowledge Items) are missing or inconsistent.
+
+### 1. Protocol Discrepancies
+- **Missing Payloads**: `⫻data/rv:`, `⫻data/draft:`, and `⫻data/cite:` were identified in `aichat_sf20_info.txt` but were missing from `docs/playbook.kl`. (Fixed)
+- **Specialized Commands**: Commands like `⫻cmd/lang:` were present but could benefit from clearer usage examples.
+
+### 2. Missing Knowledge Items (.kl files)
+- **Operational Rules**: Referenced in Workflow Step 12 (`QllickBuzz & QllickFizz`) but no definition file exists.
+- **Ethical Compliance Standards**: Referenced in Workflow Step 10 (`Dima`) but no definition file exists.
+- **Persona Specifications**: Detailed capabilities and prompt templates for each team member (GPTASe, Lyra, etc.) are not documented.
+- **Strategy Blueprints**: Strategic and tailored planning templates for `WePlan` (Steps 13, 18) are missing.
+
+### 3. Missing Structural Documentation
+- **Product Guidelines**: Referenced in conductor extension protocols but missing from `conductor/`.
+- **Technical Design (Python)**: The project rules specify a modern Python (FastAPI/Pydantic) monorepo structure, but there is no architectural specification (`⫻data/spec:`) or initial directory structure for this implementation.
+
+### 4. Code Context
+- There is currently no source code or technical documentation for the OCS Node's logic, despite the tech stack mentioning Markdown/KickLang as the primary orchestration language.

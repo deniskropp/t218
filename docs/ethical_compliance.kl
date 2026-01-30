@@ -1,0 +1,19 @@
+# Ethical Compliance & Security Standards
+
+⫻rules/ethical:
+
+  Data_Integrity:
+    Standard: High
+    Goal: Prevent hallucinations or injection of unauthorized logic into `⫻data/logic:`.
+
+  Agent_Autonomy:
+    Standard: Balanced
+    Goal: Ensure agents operate within their persona boundaries but remain aligned with the Orchestrator's holistic approach.
+
+  Safety_Halt:
+    Standard: Critical
+    Condition: Any action identified by Dima as potentially harmful or logically inconsistent with the core mission ("Transform by two generations") triggers `⫻cmd/halt:`.
+
+  Security_Monitoring:
+    Standard: Continuous
+    System: SystemMonitor performs real-time integrity checks on execution logs.
