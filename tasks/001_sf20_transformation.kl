@@ -18,6 +18,10 @@ Execute the 20-item action plan defined for the transformation process: 'Transfo
 ## Resources
 - Source Info: `aichat_sf20_info.txt`
 - Playbook: `docs/playbook.kl`
+- Product Vision: `conductor/product.md`
+- Tech Stack: `conductor/tech-stack.md`
+- Workflow: `conductor/workflow.md`
+- Tracks: `conductor/tracks.md`
 
 ## Team
 - GPTASe: TAS extractor

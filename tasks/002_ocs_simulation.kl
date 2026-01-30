@@ -1,0 +1,29 @@
+---
+type: task
+id: 002
+title: OCS Node Simulation (HTML+JS)
+status: open
+created: 2026-01-30
+tags: [simulation, proto, html, js]
+---
+
+# OCS Node Simulation (HTML+JS)
+
+## Context
+The user requests a single HTML+JS file to simulate the final product (OCS Node).
+This prototype will serve as a visual demonstration of the system's capabilities, specifically focusing on the Transformation Engine workflow.
+
+## Objective
+Build a single HTML+JS file that simulates the OCS Node interface and workflow.
+1.  Visual Interface: Modern, "premium" design as per system rules.
+2.  Simulation: Simulate the 20-step transformation workflow.
+3.  Interactivity: Allow basic user interaction to trigger the flow (e.g., input an intent).
+
+## Resources
+- Product Definition: `conductor/product.md`
+- Workflow Definition: `tasks/001_sf20_transformation.kl`
+
+## Constraints
+- Single file (HTML containing CSS and JS).
+- No external dependencies/frameworks unless CDN based (but preference for vanilla as per user rule "build a single HTML+JS").
+- Must be visually impressive ("wow" factor).
