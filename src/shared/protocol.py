@@ -17,6 +17,13 @@ class KickAction(str, Enum):
     PTAS = "ptas"    # Purified TAS
     SPEC = "spec"    # Specification/Workflow
     LOGIC = "logic"  # Logic/Content
+    VAR = "var"      # Variable/State
+    
+    # Logic Types (Gen 2)
+    IF = "if"
+    ELSE = "else"
+    LOOP = "loop"
+    ERROR = "error"
     
     # Query Types
     CLARIFY = "clarify"
@@ -24,9 +31,9 @@ class KickAction(str, Enum):
 class KickHeader(BaseModel):
     """
     Represents the ⫻header/ portion of a KickLang message.
-    e.g., ⫻cmd/exec:
+    e.g., ⫻cmd/exec: or ⫻logic/if:
     """
-    type: str  # cmd, data, query
+    type: str  # cmd, data, query, logic
     action: KickAction
     target: Optional[str] = None # e.g., Agent Name in ⫻cmd/exec:AgentName
 
