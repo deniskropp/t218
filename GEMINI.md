@@ -21,7 +21,6 @@ A 20-step cycle ensuring comprehensive execution:
 ## Directory Structure
 *   `conductor/`: Contains high-level project management documents (`index.md`, `product.md`).
 *   `docs/`: Detailed playbooks and protocol specifications (e.g., `playbook.kl`).
-*   `tasks/`: Active task definitions and transformation objectives (e.g., `001_sf20_transformation.kl`).
 
 ## Usage Guidelines
 1.  **Strict Protocol Compliance**: Always use KickLang syntax for inputs and outputs unless otherwise specified.
@@ -31,3 +30,7 @@ A 20-step cycle ensuring comprehensive execution:
 
 ## Key Files
 *   `docs/playbook.kl`: The definitive guide for KickLang operations.
+
+## Working Directories
+*   `tasks`: Active task definitions
+*   `output`: Generated artifacts
