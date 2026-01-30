@@ -1,0 +1,35 @@
+---
+type: task
+id: 005
+title: Check Repository Coherence (001-004)
+status: open
+created: 2026-01-30
+tags: [maintenance, coherence, quality-assurance, sf20, ocs]
+prev_ids: [001, 002, 003, 004]
+---
+
+# Check Repository Coherence (001-004)
+
+## Context
+The repository has been bootstrapped with a 20-step transformation workflow (Task 001) and an integrated OCS Swarm architecture (Task 004). The user has requested a coherence check "001-004: check coherence of the overall repository" to ensure alignment between the defined tasks, the documentation, and the actual codebase state.
+
+## Objective
+Verify the consistency and integrity of the repository, focusing on the alignment between high-level intent (Tasks 001-004) and the current implementation.
+
+## Scope
+1.  **Task Alignment**:
+    -   Verify that Tasks 001-004 form a logical progression without contradictions.
+    -   Check `prev_ids` and cross-references.
+2.  **Implementation Verification**:
+    -   Check `src/` structure against Task 004 specifications (FastAPI, Monorepo).
+    -   Verify that `KickLang` protocol references in code match `docs/playbook.kl`.
+3.  **Documentation Consistency**:
+    -   Ensure `GEMINI.md` and `task.md` reflect the current state.
+    -   Identify any orphaned files or deprecated artifacts.
+4.  **Report**:
+    -   Produce a `coherence_report.md` summarizing findings and recommended fixes.
+
+## Resources
+-   Tasks: `tasks/00*_*.kl`
+-   Codebase: `src/`
+-   Playbook: `docs/playbook.kl`
