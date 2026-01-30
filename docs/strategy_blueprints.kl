@@ -1,0 +1,40 @@
+# WePlan: Strategy Blueprints
+Status: **DRAFT**
+
+⫻protocol/ocs:
+  Blueprints:
+    - **Standard Transformation**: `⫻flow:transformation/execution`
+    - **Quick Fix**: `⫻flow:quick-fix`
+    - **Research Deep Dive**: `⫻flow:research`
+
+## 1. Blueprint: Standard Transformation
+**Objective**: Full end-to-end transformation of a high-level request.
+**Steps**: 1-20 (Full Cycle)
+**Usage**: Default for ambiguous or complex tasks.
+
+## 2. Blueprint: Quick Fix
+**Objective**: Rapid code correction or minor update.
+**Steps**:
+1.  TAS Extraction (GPTASe)
+6.  Code Context (Codein)
+11. Visual Assets (Optional)
+20. Review (All)
+
+## 3. Blueprint: Research Deep Dive
+**Objective**: Pure information gathering without code changes.
+**Steps**:
+1.  TAS Extraction
+5.  Knowledge Transfer (AI Tutor)
+9.  System Monitoring (Metrics)
+13. Strategic Plans (WePlan)
+
+## 4. Planning Template (KickLang)
+```
+⫻data/spec:Plan
+  Title: [Plan Name]
+  Type: [Blueprint Name]
+  Critical Path: [Steps X, Y, Z]
+  Success Criteria:
+    - [Criterion 1]
+    - [Criterion 2]
+```

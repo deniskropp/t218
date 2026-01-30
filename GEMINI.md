@@ -34,3 +34,5 @@ A 20-step cycle ensuring comprehensive execution:
 ## Working Directories
 *   `tasks`: Active task definitions
 *   `output`: Generated artifacts
+*   `src`: Implementation of the OCS Node
+
