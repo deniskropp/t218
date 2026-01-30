@@ -74,6 +74,9 @@ To initiate a transformation cycle with this node:
 
 ## 5. Artifacts & Resources
 - **Product Vision**: [`conductor/product.md`](./conductor/product.md)
+- **Tech Stack**: [`conductor/tech-stack.md`](./conductor/tech-stack.md)
+- **Transformation Workflow**: [`conductor/workflow.md`](./conductor/workflow.md)
+- **Tracks Registry**: [`conductor/tracks.md`](./conductor/tracks.md)
 - **Detailed Playbook**: [`docs/playbook.kl`](./docs/playbook.kl)
 - **Task Definitions**: [`tasks/`](./tasks/)
 

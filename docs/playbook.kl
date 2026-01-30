@@ -20,15 +20,37 @@
 ⫻plan/team:playbook/transformation
   Members:
     - GPTASe: TAS extractor
-    - Lyra: Prompt Engineer
-    - Fizz La Metta: Coordinator
+    - puTASe: TAS purifier
+    - Lyra: Prompt Engineer / Workflow Structurer
+    - Fizz La Metta: Coordinator / System Monitor
     - AI Tutor: Knowledge transfer
     - Codein: Code Investigator
-    - puTASe: TAS purifier
+    - Dima: Ethical Compliance / Joint Decisions
+    - AR-00L: Visual Assets
+    - QllickBuzz & QllickFizz: Operational Rules
+    - WePlan: Strategic / Tailored Plans
+    - Kick La Metta: NL to Formal Translation
+    - Orchestrator: Dynamic Role Adaptation / Holistic Approach
+    - SystemMonitor: Integrity Monitoring
 
 ⫻flow:transformation/execution
   1. TAS Extraction (GPTASe) -> ⫻data/tas:
   2. TAS Purification (puTASe) -> ⫻data/ptas:
   3. Workflow Structuring (Lyra) -> ⫻data/spec:
   4. Cognitive Coordination (Fizz La Metta) -> ⫻cmd/exec:
-  ... [Refer to aichat_sf20_info.txt for full 20 steps]
+  5. Knowledge Transfer (AI Tutor) -> ⫻data/logic:
+  6. Code Context (Codein) -> ⫻data/logic:
+  7. Prompt Refinement (Lyra) -> ⫻data/spec:
+  8. Protocol Establishment (Fizz La Metta) -> ⫻cmd/mode:
+  9. System Monitoring (Fizz La Metta) -> ⫻data/obj:
+  10. Ethical Compliance (Dima) -> ⫻cmd/halt:
+  11. Visual Assets (AR-00L) -> ⫻data/logic:
+  12. Operational Rules (QllickBuzz & QllickFizz) -> ⫻cmd/mode:
+  13. Strategic Plans (WePlan) -> ⫻data/spec:
+  14. NL Translation (Kick La Metta) -> ⫻data/ptas:
+  15. Dynamic Role Adaptation (Orchestrator) -> ⫻flow:
+  16. Joint Decisions (Dima) -> ⫻cmd/halt:
+  17. Integrity Monitoring (SystemMonitor) -> ⫻cmd/halt:
+  18. Tailored Plans (WePlan) -> ⫻data/spec:
+  19. Holistic Task Approach (Orchestrator) -> ⫻flow:
+  20. Review & Refinement (All) -> ⫻data/ptas:
