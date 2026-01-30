@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCS Node | SF20 Transformation Engine</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-cyan: #58a6ff;
+            --accent-green: #238636;
+            --accent-pulse: rgba(56, 139, 253, 0.15);
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(13, 17, 23, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-secondary);
+        }
+
+        .status-badge.active {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-pulse);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 60px);
+        }
+
+        .control-panel {
+            width: 400px;
+            min-width: 400px;
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            background: var(--surface-color);
+        }
+
+        .visualization-panel {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: radial-gradient(circle at 50% 50%, #1c2128 0%, #0d1117 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        textarea {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 0.75rem;
+            font-family: inherit;
+            resize: none;
+            height: 120px;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        button {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+            color: var(--text-secondary);
+        }
+
+        .steps-container {
+            width: 100%;
+            max-width: 800px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding-bottom: 2rem;
+        }
+
+        .step-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.5;
+            transform: translateY(10px);
+        }
+
+        .step-card.active {
+            opacity: 1;
+            transform: translateY(0);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-card.completed {
+            opacity: 0.8;
+            transform: translateY(0);
+            border-color: var(--accent-green);
+        }
+
+        .step-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            background: var(--bg-color);
+            transition: all 0.3s;
+        }
+
+        .step-card.active .step-indicator {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            animation: pulse-border 2s infinite;
+        }
+
+        .step-card.completed .step-indicator {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .step-agent {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .log-panel {
+            background: black;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            height: 200px;
+            overflow-y: auto;
+            color: var(--accent-cyan);
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.25rem;
+        }
+        
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(88, 166, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0); }
+        }
+
+        .glitch-text {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">OCS Node <span style="color:var(--text-secondary); font-size:0.8em;">// SF20 Engine</span></div>
+        <div class="status-badge" id="systemStatus">SYSTEM IDLE</div>
+    </div>
+
+    <div class="container">
+        <div class="control-panel">
+            <div style="flex:1;">
+                <h2 style="margin-bottom: 1rem;">Intent Transformation</h2>
+                <div class="input-group">
+                    <label>HIGH-LEVEL INTENT (KickLang/NL)</label>
+                    <textarea id="intentInput" placeholder="> Input your objective here...
+Example: 'Create a scalable microservice architecture for user authentication.'"></textarea>
+                </div>
+                <button id="transformBtn" onclick="startTransformation()">Initialize Transformation Protocol</button>
+            </div>
+            
+            <div class="input-group" style="flex:1;">
+                <label>SYSTEM LOGS</label>
+                <div class="log-panel" id="logPanel">
+                    <!-- Logs will appear here -->
+                    <div class="log-entry">> System initialized. Waiting for input...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visualization-panel">
+            <div class="steps-container" id="stepsContainer">
+                <!-- Steps will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const workflowSteps = [
+            { id: 1, title: 'TAS Extraction', agent: 'GPTASe', output: '⫻data/tas:' },
+            { id: 2, title: 'TAS Purification', agent: 'puTASe', output: '⫻data/ptas:' },
+            { id: 3, title: 'Workflow Structuring', agent: 'Lyra', output: '⫻data/spec:' },
+            { id: 4, title: 'Cognitive Coordination', agent: 'Fizz La Metta', output: '⫻cmd/exec:' },
+            { id: 5, title: 'Knowledge Transfer', agent: 'AI Tutor', output: '⫻data/logic:' },
+            { id: 6, title: 'Code Context', agent: 'Codein', output: '⫻data/logic:' },
+            { id: 7, title: 'Prompt Refinement', agent: 'Lyra', output: '⫻data/spec:' },
+            { id: 8, title: 'Protocol Establishment', agent: 'Fizz La Metta', output: '⫻cmd/mode:' },
+            { id: 9, title: 'System Monitoring', agent: 'Fizz La Metta', output: '⫻data/obj:' },
+            { id: 10, title: 'Ethical Compliance', agent: 'Dima', output: '⫻cmd/halt:' },
+            { id: 11, title: 'Visual Assets', agent: 'AR-00L', output: '⫻data/logic:' },
+            { id: 12, title: 'Operational Rules', agent: 'QllickBuzz & QllickFizz', output: '⫻cmd/mode:' },
+            { id: 13, title: 'Strategic Plans', agent: 'WePlan', output: '⫻data/spec:' },
+            { id: 14, title: 'NL Translation', agent: 'Kick La Metta', output: '⫻data/ptas:' },
+            { id: 15, title: 'Dynamic Role Adaptation', agent: 'Orchestrator', output: '⫻flow:' },
+            { id: 16, title: 'Joint Decisions', agent: 'Dima', output: '⫻cmd/halt:' },
+            { id: 17, title: 'Integrity Monitoring', agent: 'SystemMonitor', output: '⫻cmd/halt:' },
+            { id: 18, title: 'Tailored Plans', agent: 'WePlan', output: '⫻data/spec:' },
+            { id: 19, title: 'Holistic Task Approach', agent: 'Orchestrator', output: '⫻flow:' },
+            { id: 20, title: 'Review & Refinement', agent: 'All', output: '⫻data/ptas:' }
+        ];
+
+        const stepsContainer = document.getElementById('stepsContainer');
+        const logPanel = document.getElementById('logPanel');
+        const transformBtn = document.getElementById('transformBtn');
+        const statusBadge = document.getElementById('systemStatus');
+        let isRunning = false;
+
+        // Initialize UI
+        function init() {
+            stepsContainer.innerHTML = '';
+            workflowSteps.forEach(step => {
+                const card = document.createElement('div');
+                card.className = 'step-card';
+                card.id = `step-${step.id}`;
+                card.innerHTML = `
+                    <div class="step-indicator">${step.id}</div>
+                    <div class="step-content">
+                        <div class="step-title">${step.title}</div>
+                        <div class="step-agent">${step.agent}</div>
+                    </div>
+                `;
+                stepsContainer.appendChild(card);
+            });
+        }
+
+        function log(message) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerText = `> ${new Date().toLocaleTimeString()} | ${message}`;
+            logPanel.prepend(entry); // Newest first
+        }
+
+        function setStatus(status, active = false) {
+            statusBadge.innerText = status;
+            if (active) {
+                statusBadge.classList.add('active');
+            } else {
+                statusBadge.classList.remove('active');
+            }
+        }
+
+        async function startTransformation() {
+            if (isRunning) return;
+            
+            const intent = document.getElementById('intentInput').value.trim();
+            if (!intent) {
+                alert("Please enter an intent first.");
+                return;
+            }
+
+            isRunning = true;
+            transformBtn.disabled = true;
+            setStatus("EXECUTING: SF20 PROTOCOL", true);
+            log(`Starting transformation for intent: "${intent.substring(0, 30)}..."`);
+
+            // Reset UI
+            document.querySelectorAll('.step-card').forEach(c => {
+                c.classList.remove('active', 'completed');
+            });
+
+            // Simulate workflow sequence
+            for (const step of workflowSteps) {
+                await executeStep(step);
+            }
+
+            isRunning = false;
+            transformBtn.disabled = false;
+            setStatus("TRANSFORMATION COMPLETE", false);
+            log("Process finished. Artifacts generated.");
+            alert("Transformation Complete! Artifacts are ready.");
+        }
+
+        function executeStep(step) {
+            return new Promise(resolve => {
+                const card = document.getElementById(`step-${step.id}`);
+                
+                // Activate
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                log(`[${step.agent}] starting ${step.title}...`);
+
+                // Simulate processing time (random between 500ms and 1500ms)
+                const duration = Math.floor(Math.random() * 800) + 400;
+
+                setTimeout(() => {
+                    // Complete
+                    card.classList.remove('active');
+                    card.classList.add('completed');
+                    log(`[${step.agent}] generated ${step.output}`);
+                    resolve();
+                }, duration);
+            });
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

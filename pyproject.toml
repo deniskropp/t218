@@ -1,35 +1,17 @@
-[tool.poetry]
+[project]
 name = "ocs-node"
 version = "0.1.0"
 description = "OCS Node: SF20 Transformation Engine"
-authors = ["Antigravity <antigravity@gemini.google.com>"]
-readme = "README.md"
-packages = [{include = "src"}]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn>=0.29.0",
+    "pydantic>=2.7.0",
+    "rich>=13.7.0",
+    "httpx>=0.27.0",
+    "jinja2>=3.1.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-fastapi = "^0.115.0"
-uvicorn = "^0.30.0"
-pydantic = "^2.9.0"
-httpx = "^0.27.0"
-rich = "^13.8.0"
-typer = "^0.12.0"
-python-multipart = "^0.0.12"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.0"
-ruff = "^0.6.0"
-mypy = "^1.11.0"
-black = "^24.8.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.ruff]
-line-length = 120
-target-version = "py310"
-
-[tool.mypy]
-strict = true
-ignore_missing_imports = true
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

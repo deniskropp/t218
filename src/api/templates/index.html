@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCS Node | SF20 Transformation Engine (Connected)</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-cyan: #58a6ff;
+            --accent-green: #238636;
+            --accent-pulse: rgba(56, 139, 253, 0.15);
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(13, 17, 23, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-secondary);
+        }
+
+        .status-badge.connected {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 60px);
+        }
+
+        .control-panel {
+            width: 400px;
+            min-width: 400px;
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            background: var(--surface-color);
+        }
+
+        .visualization-panel {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: radial-gradient(circle at 50% 50%, #1c2128 0%, #0d1117 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        textarea {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 0.75rem;
+            font-family: inherit;
+            resize: none;
+            height: 120px;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        button {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+            color: var(--text-secondary);
+        }
+
+        .steps-container {
+            width: 100%;
+            max-width: 800px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding-bottom: 2rem;
+        }
+
+        .step-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.5;
+            transform: translateY(10px);
+        }
+
+        .step-card.active {
+            opacity: 1;
+            transform: translateY(0);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-card.completed {
+            opacity: 0.8;
+            transform: translateY(0);
+            border-color: var(--accent-green);
+        }
+
+        .step-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            background: var(--bg-color);
+            transition: all 0.3s;
+        }
+
+        .step-card.active .step-indicator {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            animation: pulse-border 2s infinite;
+        }
+
+        .step-card.completed .step-indicator {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .step-agent {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .log-panel {
+            background: black;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            height: 200px;
+            overflow-y: auto;
+            color: var(--accent-cyan);
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.25rem;
+        }
+        
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(88, 166, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">OCS Node <span style="color:var(--text-secondary); font-size:0.8em;">// SWARM BACKEND</span></div>
+        <div class="status-badge" id="connStatus">DISCONNECTED</div>
+    </div>
+
+    <div class="container">
+        <div class="control-panel">
+            <div style="flex:1;">
+                <h2 style="margin-bottom: 1rem;">Intent Transformation</h2>
+                <div class="input-group">
+                    <label>HIGH-LEVEL INTENT (KickLang/NL)</label>
+                    <textarea id="intentInput" placeholder="> Input your objective here..."></textarea>
+                </div>
+                <button id="transformBtn" onclick="startTransformation()">Initialize Swarm Protocol</button>
+            </div>
+            
+            <div class="input-group" style="flex:1;">
+                <label>SYSTEM LOGS</label>
+                <div class="log-panel" id="logPanel">
+                    <div class="log-entry">> Initializing Client...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visualization-panel">
+            <div class="steps-container" id="stepsContainer">
+                {% for step in steps %}
+                <div class="step-card" id="step-{{ step.id }}">
+                    <div class="step-indicator">{{ step.id }}</div>
+                    <div class="step-content">
+                        <div class="step-title">{{ step.title }}</div>
+                        <div class="step-agent">{{ step.agent }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stepsContainer = document.getElementById('stepsContainer');
+        const logPanel = document.getElementById('logPanel');
+        const transformBtn = document.getElementById('transformBtn');
+        const connStatus = document.getElementById('connStatus');
+        let ws;
+
+        function connect() {
+            const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${proto}//${window.location.host}/ws`);
+
+            ws.onopen = () => {
+                connStatus.innerText = "CONNECTED";
+                connStatus.classList.add('connected');
+                log("Connected to OCS Swarm Engine.");
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleMessage(data);
+            };
+
+            ws.onclose = () => {
+                connStatus.innerText = "DISCONNECTED";
+                connStatus.classList.remove('connected');
+                log("Connection lost. Reconnecting...");
+                setTimeout(connect, 2000);
+            };
+        }
+
+        function log(message) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerText = `> ${new Date().toLocaleTimeString()} | ${message}`;
+            logPanel.prepend(entry);
+        }
+
+        function startTransformation() {
+            const intent = document.getElementById('intentInput').value.trim();
+            if (!intent) return alert("Please enter an intent.");
+
+            log(`Transmitting Intent: "${intent.substring(0, 30)}..."`);
+            
+            // Reset UI
+            document.querySelectorAll('.step-card').forEach(c => {
+                c.className = 'step-card'; // Remove active/completed
+            });
+
+            ws.send(JSON.stringify({
+                type: "start_flow",
+                intent: intent
+            }));
+            
+            transformBtn.disabled = true;
+        }
+
+        function handleMessage(msg) {
+            if (msg.type === 'step_update') {
+                const card = document.getElementById(`step-${msg.step_id}`);
+                if (msg.status === 'running') {
+                    card.classList.add('active');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    log(`[Step ${msg.step_id}] Started execution.`);
+                } else if (msg.status === 'completed') {
+                    card.classList.remove('active');
+                    card.classList.add('completed');
+                    log(`[Step ${msg.step_id}] Completed. Result: ${msg.result}`);
+                }
+            } else if (msg.type === 'flow_complete') {
+                log("Swarm Execution Complete.");
+                transformBtn.disabled = false;
+                alert("Transformation Complete!");
+            }
+        }
+
+        connect();
+    </script>
+</body>
+</html>

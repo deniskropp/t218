@@ -1,0 +1,35 @@
+---
+type: task
+id: 004
+title: Integrated OCS Swarm Execution
+status: open
+created: 2026-01-30
+tags: [ocs, swarm, integration, python, fastapi]
+prev_ids: [002, 003]
+---
+
+# Integrated OCS Swarm Execution
+
+## Context
+Routing tasks **002 (Simulation)** and **003 (Swarm Init)** into a unified execution phase.
+Task 002 provided the visual target and UX flow.
+Task 003 established the `⫻flow:ocs/swarm` protocol requirements.
+
+## Objective
+Implement the functional OCS Node by bridging the visual prototype with a real Python/FastAPI backend that executes the Swarm Protocol.
+
+## Scope
+1.  **Backend Implementation**:
+    -   Setup FastAPI Monorepo (`src/api`, `src/shared`).
+    -   Implement `KickLang` parser in Python.
+    -   Implement the `⫻flow:ocs/swarm` logic (parallel tracks).
+2.  **Frontend Integration**:
+    -   Port `ocs_simulation.html` to a template served by FastAPI.
+    -   Replace simulated JS timeouts with real WebSocket/SSE events from the backend.
+3.  **Validation**:
+    -   Execute the "Transformation" intent against the real backend.
+
+## Resources
+-   Simulation: `output/ocs_simulation.html`
+-   Swarm Proto: `tasks/003_ocs_swarm_init.kl`
+-   Playbook: `docs/playbook.kl`
