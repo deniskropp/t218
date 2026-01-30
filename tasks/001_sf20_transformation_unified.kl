@@ -1,0 +1,10 @@
+⫻cmd/exec:Orchestrator
+⫻data/obj: Holistic Integration of OCS Gen 2/3
+
+⫻flow:
+1. **Initialize**: Load KickLang v2.0 spec.
+2. **Synchronize**: All agents adopt "Swarm Mode" (`⫻cmd/mode:Swarm`).
+3. **Execute**: Parallel tracks for Protocol, Orchestration, and Tools.
+4. **Validate**: Run Benchmarks and Integrity Checks.
+5. **Deploy**: Update `docs/playbook.kl` and `conductor/product.md`.
+6. **Report**: Final status to user.

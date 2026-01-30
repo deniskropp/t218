@@ -1,0 +1,9 @@
+⫻cmd/exec:QllickBuzz & QllickFizz
+⫻data/ptas: Edge Cases for ⫻logic/ blocks
+
+⫻cmd/mode:Strict
+⫻data/logic:
+1. **Empty Loops**: `⫻logic/loop:` on an empty set must result in an immediate skip, not an error.
+2. **Infinite Loops**: `SystemMonitor` will terminate any `⫻logic/loop:` exceeding 100 iterations unless explicitly white-listed.
+3. **Branching Conflicts**: If both `⫻logic/if:` and `⫻logic/else:` conditions are ambiguously met (variable overlap), the system must `⫻cmd/halt:` and query `Dima`.
+4. **Error Propagation**: Errors in a sub-flow must bubble up to the parent flow unless caught by a local `⫻logic/error:` block.

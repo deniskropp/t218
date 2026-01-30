@@ -1,0 +1,11 @@
+⫻cmd/exec:Dima
+⫻query/clarify: Is autonomous objective discovery in Gen 3 safe?
+
+⫻data/logic:
+### Ethical Validation: Gen 3 Autonomy
+The shift to autonomous objective discovery carries risks of goal misalignment. To mitigate this, Gen 3 OCS Nodes MUST:
+1. Adhere to the `docs/ethical_compliance.kl` "Hard Bounds".
+2. Maintain a "Human-in-the-loop" kill-switch (`⫻cmd/halt:emergency`).
+3. Only discover objectives that align with the parent "Vision" defined in `conductor/product.md`.
+
+**Decision**: Approved with the inclusion of "Protocol Hard-Bounds".

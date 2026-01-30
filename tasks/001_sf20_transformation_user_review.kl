@@ -1,0 +1,9 @@
+⫻cmd/exec:WePlan
+⫻query/clarify: User review of Gen 2 artifacts.
+
+⫻data/spec:
+### User Review Workflow
+1. **Artifact Inspection**: User reviews `tasks/001_sf20_transformation_code.kl` and `tasks/001_sf20_transformation_rules.kl`.
+2. **Interactive Demo**: Orchestrator runs a sample `⫻flow:ocs/swarm` in a test directory.
+3. **Feedback Loop**: User provides adjustments via `⫻query/clarify:`.
+4. **Final Lock**: Approval of the Gen 2 baseline.

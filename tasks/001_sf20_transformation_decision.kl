@@ -1,0 +1,10 @@
+⫻cmd/exec:Dima
+⫻query/clarify: Should Gen 2 support Gen 1 protocols natively or via a translation layer?
+
+⫻data/logic:
+### Consensus: Migration Layer
+To ensure zero downtime and maintain project integrity, Gen 2 will implement a **Translation Layer** for Gen 1 payloads. 
+- Pros: Keeps the Gen 2 core clean.
+- Cons: Minor overhead in processing Gen 1 tasks.
+
+**Decision**: Implement the `⫻protocol/compat:v1` layer. No `⫻cmd/halt:` required.

@@ -1,0 +1,33 @@
+⫻cmd/exec:Lyra
+⫻data/ptas: [from tasks/001_sf20_transformation_ptas.kl]
+
+⫻data/spec:
+# OCS Node Evolution Strategy (Gen 2 & 3)
+
+## Track 1: Protocol Architecture (KickLang v2.0)
+- **Objective**: Enhance KickLang to support complex logic and error handling.
+- **Workflow**:
+  1. Draft `docs/spec/kicklang_v2.kl`.
+  2. Implement parser extensions for logical operators.
+  3. Validate against nested multi-agent tasks.
+
+## Track 2: Orchestration Engine (Swarm Mode)
+- **Objective**: Transition from sequential to event-driven agent coordination.
+- **Workflow**:
+  1. Define the `⫻flow:ocs/swarm` protocol.
+  2. Upgrade `Orchestrator` to support capability-based discovery.
+  3. Implement asynchronous agent state management.
+
+## Track 3: High-Fidelity Tools & Benchmarking
+- **Objective**: Upgrade agent tools and establish performance metrics.
+- **Workflow**:
+  1. Enhance `Codein` for full-project context awareness.
+  2. Integrate `AR-00L` with advanced generative assets.
+  3. Execute `tasks/benchmarks/transformation_fidelity.kl`.
+
+## Track 4: Migration & Integration
+- **Objective**: Deploy the new system while maintaining backward compatibility.
+- **Workflow**:
+  1. Create a migration layer for Gen 1 tasks.
+  2. Update all docs in `conductor/` to reflect Gen 2/3 capabilities.
+  3. Perform final "Review & Refinement" cycle.

@@ -1,0 +1,17 @@
+⫻cmd/exec:WePlan
+⫻data/obj: OCS Gen 3 Roadmap
+
+⫻data/spec:
+# Roadmap to OCS Generation 3: Autonomy
+
+## Phase 1: Semantic Grounding (Q2 2026)
+- Integrate a knowledge graph for cross-task context persistence.
+- Develop "Persona Synthesis" – agents can temporarily spawn sub-agents.
+
+## Phase 2: Autonomous Objective Discovery (Q3 2026)
+- Implement predictive goal-seeking logic.
+- Establish the "Decentralized Registry" for multi-node coordination.
+
+## Phase 3: Self-Evolving Protocols (Q4 2026)
+- Enable the OCS Node to rewrite its own `playbook.kl` based on performance metrics.
+- Full "Swarm Maturity" – zero human intervention for standard transformation tasks.

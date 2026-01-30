@@ -1,0 +1,9 @@
+⫻cmd/exec:Fizz La Metta
+⫻data/spec: Operational Rules for Swarm Mode
+
+⫻cmd/mode:Swarm
+⫻data/logic:
+1. **Parallel Execution**: Agents may process independent sub-tasks simultaneously if no data dependency exists.
+2. **State Synchronization**: All agents must report status to the `SystemMonitor` at every milestone.
+3. **Consensus Requirement**: Any change to `conductor/product.md` requires `Dima` and `Fizz La Metta` approval.
+4. **Recursive Decomposition**: If a TAS contains more than 5 sub-steps, it must be automatically decomposed into a new `⫻flow:`.

@@ -1,0 +1,25 @@
+⫻cmd/exec:Codein
+⫻data/spec: Track 1 (KickLang v2.0)
+
+⫻data/logic:
+```kl
+⫻protocol/ocs:v2.0
+  ⫻logic/if: (condition)
+    ⫻cmd/exec:AgentA
+  ⫻logic/else:
+    ⫻cmd/exec:AgentB
+
+  ⫻logic/loop: (iterable)
+    ⫻cmd/exec:AgentC
+
+  ⫻logic/error: (handler)
+    ⫻cmd/halt: "Error message"
+
+  ⫻data/var:
+    $task_status = "active"
+```
+
+**Implementation Strategy**: 
+1. Use a regular expression engine to identify the new `⫻logic/` headers.
+2. Implement a simple state machine in the `Orchestrator` to track variables and branch execution based on payload values.
+3. Update the `playbook.kl` to include these new primitives.

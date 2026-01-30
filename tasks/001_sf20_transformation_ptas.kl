@@ -1,0 +1,12 @@
+⫻cmd/exec:puTASe
+⫻data/tas: [from tasks/001_sf20_transformation_tas.kl]
+
+⫻data/ptas:
+1. **Protocol Audit**: Analyze `docs/playbook.kl` and `aichat_sf20_info.txt` to identify bottlenecks in the current KickLang implementation, specifically focusing on the lack of error handling and conditional branching.
+2. **Gen 2 Specification**: Draft a technical specification for KickLang v2.0, introducing `⫻logic/if:`, `⫻logic/loop:`, and `⫻logic/error:` blocks.
+3. **Gen 3 Conceptualization**: Define the architectural requirements for "Autonomous OCS Nodes," including decentralized objective discovery and peer-to-peer protocol sync.
+4. **Workflow Evolution**: Map the existing 20-step `⫻flow:transformation/execution` to a new `⫻flow:ocs/swarm` model that allows for parallelized execution and asynchronous agent callbacks.
+5. **Tooling Requirements**: Document specific enhancements needed for `Codein` (deep dependency analysis) and `AR-00L` (generative design systems).
+6. **Fidelity Benchmarking**: Create a set of test cases in `tasks/benchmarks/` that verify the OCS Node's ability to handle nested objectives and self-correcting workflows.
+7. **Protocol Refinement**: Update `docs/playbook.kl` with the new v2.0 syntax and agent interaction rules.
+8. **Orchestration Update**: Define the "Orchestrator v2" logic, shifting from static role assignment to dynamic capability-based routing.
