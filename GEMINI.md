@@ -22,7 +22,6 @@ A 20-step cycle ensuring comprehensive execution:
 *   `conductor/`: Contains high-level project management documents (`index.md`, `product.md`).
 *   `docs/`: Detailed playbooks and protocol specifications (e.g., `playbook.kl`).
 *   `tasks/`: Active task definitions and transformation objectives (e.g., `001_sf20_transformation.kl`).
-*   `aichat_sf20_info.txt`: Source context and detailed breakdown of the SF20 transformation session.
 
 ## Usage Guidelines
 1.  **Strict Protocol Compliance**: Always use KickLang syntax for inputs and outputs unless otherwise specified.
@@ -31,7 +30,4 @@ A 20-step cycle ensuring comprehensive execution:
 4.  **Task Management**: New objectives should be recorded as `.kl` files in the `tasks/` directory.
 
 ## Key Files
-*   `README.md`: Primary entry point and protocol overview.
 *   `docs/playbook.kl`: The definitive guide for KickLang operations.
-*   `conductor/product.md`: The vision and success criteria for the OCS Node.
-*   `aichat_sf20_info.txt`: Detailed operational context for the SF20 transformation engine.
