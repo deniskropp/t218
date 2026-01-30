@@ -5,6 +5,7 @@ from src.shared.models import OCSFlow, TransformationStep, KickLangPacket
 from src.shared.workflow import SF20_WORKFLOW_STEPS
 from src.shared.protocol import KickHeader
 from src.shared.llm_provider import MistralProvider
+from src.shared.interfaces import FlowNotifier
 
 class SwarmEngine:
     def __init__(self):
@@ -26,49 +27,67 @@ class SwarmEngine:
         self.active_flows[flow.flow_id] = flow
         return flow
 
-    async def run_flow(self, flow_id: str, websocket):
+    async def run_flow(self, flow_id: str, notifier):
+        """
+        Executes a flow using the provided notifier for updates.
+        :param flow_id: The ID of the flow to execute
+        :param notifier: An instance implementing FlowNotifier (e.g. WebSocket or CLI console)
+        """
         flow = self.active_flows.get(flow_id)
         if not flow:
             return
 
         flow.status = "active"
         
-        # In the context of "Swarm", we treat ⫻flow:ocs/swarm rules:
-        # "Parallelized execution of independent tracks"
-        # However, the 20-step transformation is largely sequential in its definition.
-        # To respect the "Simulation" aspect while keeping it verified, we will 
-        # iterate but simulate "Agent Handoffs" with delays.
-        
+        # Accumulate context from all previous steps
+        # In a real system, this might be selective or summarized.
+        execution_context = []
+
         for i, step in enumerate(flow.steps):
             flow.current_step_index = i
             step.status = "running"
             
-            # Notify Client: Step Started
-            await websocket.send_json({
-                "type": "step_update",
-                "step_id": step.id,
-                "status": "running"
-            })
+            # Notify: Step Started
+            await notifier.step_started(step.id)
 
-            # Generate Prompt for LLM
-            prompt = f"Step: {step.title}\nAgent: {step.agent}\nContext: {flow.intent}\nOutput Type: {step.output_type}\n\nPerform this step and provide the result."
+            # Construct the Context Block
+            context_block = "\n".join(execution_context) if execution_context else "No prior context."
+
+            # Generate Prompt for LLM with rigid KickLang constraints
+            # We strictly enforce the Agent Persona and the required Output Type.
+            prompt = (
+                f"--- SYSTEM ---\n"
+                f"You are {step.agent}.\n"
+                f"Your task is {step.title}.\n"
+                f"You MUST strictly output your response starting with the KickLang header: {step.output_type}\n"
+                f"Do not include any conversational filler before or after the KickLang packet.\n\n"
+                f"--- CONTEXT ---\n"
+                f"User Intent: {flow.intent}\n"
+                f"Prior Execution History:\n{context_block}\n\n"
+                f"--- INSTRUCTION ---\n"
+                f"Perform the task '{step.title}' and provide the result using the header {step.output_type}."
+            )
+
+            # Flatten delay simulation (random 0.5s - 1.5s) to mimic "thinking" / agent handoff
+            await asyncio.sleep(random.uniform(0.5, 1.5))
 
             # Execute Step via Provider
             result = await self.provider.generate_response(prompt)
             
             step.status = "completed"
             step.result = result
+            
+            # Accumulate this result into the execution context for future steps
+            execution_context.append(f"[Step {step.id} - {step.agent}]:\n{result}\n")
 
-            # Notify Client: Step Completed
-            await websocket.send_json({
-                "type": "step_update",
-                "step_id": step.id,
-                "status": "completed",
-                "result": step.result
-            })
+            # Check for HALT condition (simulation)
+            if "⫻cmd/halt:" in result or step.output_type == "⫻cmd/halt:":
+                # In a real system, we would pause execution here and wait for user input.
+                # For now, we log it and proceed, effectively "auto-approving" in simulation mode.
+                pass 
+
+            # Notify: Step Completed
+            await notifier.step_completed(step.id, result)
 
         flow.status = "completed"
-        await websocket.send_json({
-            "type": "flow_complete",
-            "flow_id": flow.flow_id
-        })
+        await notifier.flow_completed(flow.flow_id)
