@@ -1,0 +1,118 @@
+---
+type: task
+id: 001
+title: SF20 Transformation Execution
+status: open
+created: 2026-01-30
+tags: [transformation, playbook, sf20]
+---
+
+# SF20 Transformation Execution
+
+## Context
+This task encapsulates the execution of the "playbook/transformation" team action plan, derived from session `f20.yaml` (SF20). The goal is to transform high-level intent into high-fidelity execution using the OCS protocol.
+
+## Objective
+Execute the 20-item action plan defined for the transformation process: 'Transform by two generations'
+
+## Resources
+- Source Info: `aichat_sf20_info.txt`
+- Playbook: `docs/playbook.kl`
+
+## Team
+- GPTASe: TAS extractor
+- Lyra: Prompt Engineer
+- Fizz La Metta: Coordinator
+- AI Tutor: Knowledge transfer
+- Codein: Code Investigator
+- puTASe: TAS purifier
+- Dima: Ethical Compliance / Decision
+- AR-00L: Visual Assets
+- QllickBuzz & QllickFizz: Operational Rules
+- WePlan: Strategic Plans
+- Kick La Metta: NL to Formal
+- Orchestrator: Dynamic Role Adaptation
+- SystemMonitor: Integrity Monitoring
+
+## Execution Flow
+### ⫻flow:transformation/execution
+
+1. **TAS Extraction (GPTASe)**
+   - Input: High-level objective (`⫻data/obj:`)
+   - Output: Raw Task Agnostic Steps (`⫻data/tas:`)
+
+2. **TAS Purification (puTASe)**
+   - Input: `⫻data/tas:`
+   - Output: Refined, ambiguity-free steps (`⫻data/ptas:`)
+
+3. **Workflow Structuring (Lyra)**
+   - Input: `⫻data/ptas:`
+   - Output: Optimized workflows (`⫻data/spec:`)
+
+4. **Cognitive Coordination (Fizz La Metta)**
+   - Input: `⫻data/spec:`
+   - Output: Aligned agent roles (`⫻cmd/exec:`)
+
+5. **Knowledge Transfer (AI Tutor)**
+   - Input: Domain-specific queries (`⫻query/clarify:`)
+   - Output: Contextual insights (`⫻data/logic:`)
+
+6. **Code Context (Codein)**
+   - Input: Implementation needs (`⫻data/spec:`)
+   - Output: Code snippets/references (`⫻data/logic:`)
+
+7. **Prompt Refinement (Lyra)**
+   - Input: Feedback loops (`⫻query/clarify:`)
+   - Output: Optimized prompts (`⫻data/spec:`)
+
+8. **Protocol Establishment (Fizz La Metta)**
+   - Input: Workflow gaps (`⫻data/spec:`)
+   - Output: Operational rules (`⫻cmd/mode:`)
+
+9. **System Monitoring (Fizz La Metta)**
+   - Input: Execution logs (`⫻data/logic:`)
+   - Output: Performance metrics (`⫻data/obj:`)
+
+10. **Ethical Compliance (Dima)**
+    - Input: Decision points (`⫻query/clarify:`)
+    - Output: Ethical validation (`⫻cmd/halt:` if needed)
+
+11. **Visual Assets (AR-00L)**
+    - Input: Design requirements (`⫻data/spec:`)
+    - Output: Visual prototypes (`⫻data/logic:`)
+
+12. **Operational Rules (QllickBuzz & QllickFizz)**
+    - Input: Edge cases (`⫻data/ptas:`)
+    - Output: Rule refinements (`⫻cmd/mode:`)
+
+13. **Strategic Plans (WePlan)**
+    - Input: Long-term objectives (`⫻data/obj:`)
+    - Output: Roadmaps (`⫻data/spec:`)
+
+14. **NL Translation (Kick La Metta)**
+    - Input: Informal requests (`⫻data/obj:`)
+    - Output: Formalized tasks (`⫻data/ptas:`)
+
+15. **Dynamic Role Adaptation (Orchestrator)**
+    - Input: Workload shifts (`⫻cmd/exec:`)
+    - Output: Reassigned roles (`⫻flow:`)
+
+16. **Joint Decisions (Dima)**
+    - Input: Conflicts (`⫻query/clarify:`)
+    - Output: Consensus (`⫻cmd/halt:`)
+
+17. **Integrity Monitoring (SystemMonitor)**
+    - Input: System logs (`⫻data/logic:`)
+    - Output: Security alerts (`⫻cmd/halt:`)
+
+18. **Tailored Plans (WePlan)**
+    - Input: User feedback (`⫻query/clarify:`)
+    - Output: Customized workflows (`⫻data/spec:`)
+
+19. **Holistic Task Approach (Orchestrator)**
+    - Input: Cross-domain tasks (`⫻data/obj:`)
+    - Output: Unified execution (`⫻flow:`)
+
+20. **Review & Refinement (All)**
+    - Input: Final outputs (`⫻data/logic:`)
+    - Output: Iterative improvements (`⫻data/ptas:`)
