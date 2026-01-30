@@ -1,7 +1,7 @@
 import typer
 from rich.console import Console
 from rich.table import Table
-from src.shared.workflow import TRANSFORMATION_WORKFLOW
+from src.shared.workflow import SF20_WORKFLOW_STEPS
 
 app = typer.Typer(help="OCS Node: SF20 Transformation Engine CLI")
 console = Console()
@@ -16,13 +16,13 @@ def status():
     table = Table(title="Transformation Workflow")
     table.add_column("Step", style="cyan")
     table.add_column("Agent", style="magenta")
-    table.add_column("Description")
+    table.add_column("Output Type")
     
-    for step in TRANSFORMATION_WORKFLOW:
+    for step in SF20_WORKFLOW_STEPS:
         table.add_row(
-            str(step["number"]),
-            step["agent"],
-            step["description"]
+            str(step.id),
+            step.agent,
+            step.output_type
         )
         
     console.print(table)

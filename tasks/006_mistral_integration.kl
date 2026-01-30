@@ -1,0 +1,33 @@
+---
+type: task
+id: 006
+title: Mistral AI Integration
+status: open
+created: 2026-01-30
+tags: [integration, mistral, llm, env, python]
+prev_ids: [005]
+---
+
+# Mistral AI Integration
+
+## Context
+Following the repository coherence check (Task 005), the repository is ready for LLM integration. The user has explicitly requested the integration of Mistral AI using the `MISTRAL_API_KEY` from the environment.
+
+## Objective
+Integrate the Mistral AI client into the OCS Node backend to enable real LLM capabilities for the Swarm Engine.
+
+## Scope
+1.  **Dependencies**:
+    -   Add `mistralai` and `python-dotenv` (if needed) to project dependencies (`requirements.txt` or `pyproject.toml`).
+2.  **Implementation**:
+    -   Create `src/shared/llm_provider.py` (or similar) to abstract LLM calls.
+    -   Implement Mistral connection using `os.environ["MISTRAL_API_KEY"]`.
+    -   **Constraint**: Fail gracefully if the key is missing.
+3.  **Integration**:
+    -   Update `SwarmEngine` in `src/api/engine.py` to use the Mistral provider for step execution instead of mock logic headers.
+4.  **Verification**:
+    -   Test connectivity with a simple "Hello World" prompt via the `⫻query/clarify` protocol.
+
+## Resources
+-   Mistral API Key: `env:MISTRAL_API_KEY`
+-   Codebase: `src/api/engine.py`, `src/shared/protocols.py`

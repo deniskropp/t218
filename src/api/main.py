@@ -1,7 +1,7 @@
 from fastapi import FastAPI, WebSocket, Request, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from src.shared.data import SF20_WORKFLOW_STEPS
+from src.shared.workflow import SF20_WORKFLOW_STEPS
 from src.api.engine import SwarmEngine
 from pathlib import Path
 
@@ -13,6 +13,10 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Initialize Engine
 engine = SwarmEngine()
+
+@app.get("/health")
+async def health():
+    return {"status": "online", "system": "OCS Node"}
 
 @app.get("/")
 async def get(request: Request):

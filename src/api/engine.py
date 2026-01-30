@@ -2,13 +2,24 @@ import asyncio
 import random
 from typing import List, Dict
 from src.shared.models import OCSFlow, TransformationStep, KickLangPacket
-from src.shared.data import SF20_WORKFLOW_STEPS
+from src.shared.workflow import SF20_WORKFLOW_STEPS
+from src.shared.protocol import KickHeader
+from src.shared.llm_provider import MistralProvider
 
 class SwarmEngine:
     def __init__(self):
         self.active_flows: Dict[str, OCSFlow] = {}
+        self.provider = MistralProvider()
 
     def create_flow(self, intent: str) -> OCSFlow:
+        # Detect KickLang Header if present
+        try:
+            if intent.startswith("⫻"):
+                header = KickHeader.from_string(intent.split("\n")[0])
+                print(f"Detected KickLang Header: {header.to_string()}")
+        except Exception as e:
+            print(f"Failed to parse KickLang header: {e}")
+
         # Clone the template steps for this new flow
         steps = [step.model_copy() for step in SF20_WORKFLOW_STEPS]
         flow = OCSFlow(intent=intent, steps=steps)
@@ -39,14 +50,14 @@ class SwarmEngine:
                 "status": "running"
             })
 
-            # Simulate "Work" being done by the Agent
-            # Random duration between 0.5s and 1.5s
-            duration = random.uniform(0.5, 1.5)
-            await asyncio.sleep(duration)
+            # Generate Prompt for LLM
+            prompt = f"Step: {step.title}\nAgent: {step.agent}\nContext: {flow.intent}\nOutput Type: {step.output_type}\n\nPerform this step and provide the result."
 
-            # Check for failure (Optional, keeping it happy path for demo)
+            # Execute Step via Provider
+            result = await self.provider.generate_response(prompt)
+            
             step.status = "completed"
-            step.result = f"Generated {step.output_type} block."
+            step.result = result
 
             # Notify Client: Step Completed
             await websocket.send_json({
