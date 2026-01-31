@@ -1,9 +1,27 @@
 from datetime import datetime
-from typing import List, Optional, Literal, Dict, Any
+from typing import List, Optional, Literal, Dict, Any, Union
 from pydantic import BaseModel, Field
+from enum import Enum
 import uuid
 
 # -- KickLang Protocol Models --
+
+class MessageType(str, Enum):
+    CMD = "cmd"
+    DATA = "data"
+    QUERY = "query"
+    FLOW = "flow"
+    PROTOCOL = "protocol"
+    PLAN = "plan"
+    LOGIC = "logic"
+
+class KickLangDirective(BaseModel):
+    command: str
+    parameters: Dict[str, Any] = Field(default_factory=dict)
+
+class KickLangPayload(BaseModel):
+    key: str
+    value: Any
 
 class KickLangPacket(BaseModel):
     """Represents a standard data packet in the KickLang protocol."""
